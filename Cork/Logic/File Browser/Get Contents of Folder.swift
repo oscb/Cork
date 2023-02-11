@@ -40,17 +40,24 @@ func getContentsOfFolder(targetFolder: URL) async -> [BrewPackage]
                 }
 
                 print("URL of this package: \(targetFolder.appendingPathComponent(item, conformingTo: .folder))")
-                
+
                 /// What the fuck?
                 let installedOn: Date? = (try? FileManager.default.attributesOfItem(atPath: targetFolder.appendingPathComponent(item, conformingTo: .folder).path))?[.creationDate] as? Date
-                
+
                 let folderSizeRaw: Int64? = directorySize(url: targetFolder.appendingPathComponent(item, conformingTo: .directory))
-                
+
                 print("\n Installation date for package \(item) at path \(targetFolder.appendingPathComponent(item, conformingTo: .directory)) is \(installedOn) \n")
-                
-                //let installedOn: Date? = try? URL(string: item)!.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
-                
-                contentsOfFolder.append(BrewPackage(name: item, installedOn: installedOn, versions: temporaryVersionStorage, sizeInBytes: folderSizeRaw))
+
+                // let installedOn: Date? = try? URL(string: item)!.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+
+                if targetFolder.path.contains("Cellar")
+                {
+                    contentsOfFolder.append(BrewPackage(name: item, type: .formula, installedOn: installedOn, versions: temporaryVersionStorage, sizeInBytes: folderSizeRaw))
+                }
+                else
+                {
+                    contentsOfFolder.append(BrewPackage(name: item, type: .cask, installedOn: installedOn, versions: temporaryVersionStorage, sizeInBytes: folderSizeRaw))
+                }
 
                 temporaryVersionStorage = [String]()
             }

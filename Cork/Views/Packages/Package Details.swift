@@ -25,7 +25,7 @@ struct PackageDetailView: View
     @State private var description: String = ""
     @State private var homepage: String = ""
     @State private var tap: String = ""
-    
+
     @State var isShowingPopover: Bool = false
 
     var body: some View
@@ -34,14 +34,15 @@ struct PackageDetailView: View
         {
             VStack(alignment: .leading, spacing: 5)
             {
-                HStack(alignment: .firstTextBaseline, spacing: 5) {
+                HStack(alignment: .firstTextBaseline, spacing: 5)
+                {
                     Text(package.name)
                         .font(.title)
                     Text("v. \(returnFormattedVersions(package.versions))")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
-                
+
                 if packageInfo.contents != nil
                 {
                     Text(description)
@@ -59,7 +60,7 @@ struct PackageDetailView: View
                 {
                     Text("Package Info")
                         .font(.title2)
-                    
+
                     GroupBox
                     {
                         Grid(alignment: .leading)
@@ -69,21 +70,36 @@ struct PackageDetailView: View
                                 Text("Tap")
                                 Text(tap)
                             }
-                            
+
                             Divider()
-                            
+
+                            GridRow(alignment: .top)
+                            {
+                                Text("Type")
+                                switch package.type
+                                {
+                                case .formula:
+                                    Text("Formula")
+                                    
+                                case .cask:
+                                    Text("Cask")
+                                }
+                            }
+
+                            Divider()
+
                             GridRow(alignment: .top)
                             {
                                 Text("Homepage")
                                 Text(.init(homepage))
                             }
                         }
-
                     }
-                    
+
                     if let installedOnDate = package.installedOn // Only show the "Installed on" date for packages that are actually installed
                     {
-                        GroupBox {
+                        GroupBox
+                        {
                             Grid(alignment: .leading)
                             {
                                 GridRow(alignment: .top)
@@ -91,25 +107,28 @@ struct PackageDetailView: View
                                     Text("Installed On")
                                     Text(package.convertDateToPresentableFormat(date: installedOnDate))
                                 }
-                                
+
                                 if let packageSize = package.sizeInBytes
                                 {
                                     Divider()
-                                    
+
                                     GridRow(alignment: .top)
                                     {
                                         Text("Size")
-                                        
+
                                         HStack
                                         {
                                             Text(package.convertSizeToPresentableFormat(size: packageSize))
-                                            
-                                            if isCask {
-                                                HelpButton {
+
+                                            if isCask
+                                            {
+                                                HelpButton
+                                                {
                                                     isShowingPopover.toggle()
                                                 }
                                                 .help("Why is the size so small?")
-                                                .popover(isPresented: $isShowingPopover) {
+                                                .popover(isPresented: $isShowingPopover)
+                                                {
                                                     VStack(alignment: .leading, spacing: 10)
                                                     {
                                                         Text("Why is the size so small?")

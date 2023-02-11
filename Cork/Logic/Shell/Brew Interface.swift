@@ -50,7 +50,8 @@ func getListOfUpgradeablePackages() async -> [BrewPackage]
     let outdatedPackages = outdatedPackagesRaw.components(separatedBy: "\n")
     
     for package in outdatedPackages {
-        finalOutdatedPackages.append(BrewPackage(name: package, installedOn: nil, versions: [""], sizeInBytes: nil))
+        #warning("Remove the type from here once I know how to differentiate between updateable formulae and casks")
+        finalOutdatedPackages.append(BrewPackage(name: package, type: .formula, installedOn: nil, versions: [""], sizeInBytes: nil))
     }
     
     finalOutdatedPackages.removeLast()
