@@ -98,7 +98,7 @@ struct ContentView: View
         }
         .sheet(isPresented: $isShowingInstallSheet)
         {
-            AddFormulaView(isShowingSheet: $isShowingInstallSheet, brewData: brewData)
+            AddFormulaView(isShowingSheet: $isShowingInstallSheet)
         }
         .sheet(isPresented: $isShowingTapSheet)
         {
